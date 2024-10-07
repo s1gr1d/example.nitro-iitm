@@ -1,0 +1,18 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nitro build",
+    "dev": "nitro dev",
+    "prepare": "nitro prepare",
+    "start": "node .output/server/index.mjs",
+    "start:import": "node --import ./.output/server/extra-loader-file.mjs .output/server/index.mjs",
+    "format": "npx prettier . --write"
+  },
+  "dependencies": {
+    "import-in-the-middle": "^1.11.2"
+  },
+  "devDependencies": {
+    "nitropack": "latest",
+    "prettier": "3.3.3"
+  }
+}
