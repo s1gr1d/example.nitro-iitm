@@ -3,34 +3,22 @@ export default defineNitroConfig({
   srcDir: "server",
   debug: true,
 
-  rollupConfig: {
-    plugins: [
-      {
-        name: "add-input",
-        options(options) {
-          if (!options.input) {
-            options.input = {};
-          }
-
-          // @ts-ignore - options.input is a string
-          options.input = [options.input, "./extra-loader-file.ts"];
-
-          // @ts-ignore - options.output exists
-          options.output = {
-            // @ts-ignore - options.output exists
-            ...options.output,
-            entryFileNames: (chunk) => {
-              if (chunk.facadeModuleId.endsWith("/extra-loader-file.ts")) {
-                return "extra-loader-file.mjs";
-              } else {
-                return "index.mjs";
-              }
-            },
-          };
-
-          return options;
-        },
-      },
+  virtual: {
+    "import-in-the-middle-register": /* js */ `
+  import { register } from "node:module";
+  console.log("registering import-in-the-middle hook");
+  register("import-in-the-middle/hook.mjs", import.meta['url']);
+`,
+  },
+  unenv: {
+    polyfill: ["import-in-the-middle-register"],
+  },
+  externals: {
+    external: ["import-in-the-middle"],
+    traceInclude: [
+      require.resolve("import-in-the-middle/index.js"),
+      require.resolve("import-in-the-middle/lib/register.js"),
+      require.resolve("import-in-the-middle/hook.mjs"),
     ],
   },
 });
