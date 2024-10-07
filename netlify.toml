@@ -1,0 +1,2 @@
+[functions]
+  included_files = ["./.netlify/functions/server/extra-loader-file.mjs", "./extra-loader-file.ts"]
